@@ -4,15 +4,6 @@ from encryptor import Encryptor, InfoManager
 from caesar_hacker import CaesarCipher
 
 
-# def create_parser():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('command')
-#     parser.add_argument('--cipher', default="caesar")
-#     parser.add_argument('--key', default="1")
-#     parser.add_argument('--input_file', default=None)
-#     parser.add_argument('--output_file', default=None)
-#     return parser
-
 class Parser:
     parser = argparse.ArgumentParser()
 
@@ -41,11 +32,15 @@ if __name__ == "__main__":
             manager.text = [Encryptor.encode_word_caesar(line, namespace.key) for line in manager.text]
         elif namespace.cipher == "vigenere":
             manager.text = [Encryptor.encode_word_vigenere(line, namespace.key) for line in manager.text]
+        elif namespace.cipher == "vernam":
+            manager.text = [Encryptor.encode_word_vernam(line, namespace.key) for line in manager.text]
     elif namespace.module == "decode":
         if namespace.cipher == "caesar":
             manager.text = [Encryptor.decode_word_caesar(line, namespace.key) for line in manager.text]
         elif namespace.cipher == "vigenere":
             manager.text = [Encryptor.decode_word_vigenere(line, namespace.key) for line in manager.text]
+        elif namespace.cipher == "vernam":
+            manager.text = [Encryptor.decode_word_vernam(line, namespace.key) for line in manager.text]
     elif namespace.module == "hack":
         manager.text = [CaesarCipher.hack(line) for line in manager.text]
 

@@ -1,4 +1,5 @@
 from sys import stdin
+import operator
 
 
 class InfoManager:
@@ -38,12 +39,24 @@ class Encryptor(object):
     @staticmethod
     def encode_symbol(symbol, key):
         """Encode the symbol by the key symbol from ascii"""
-        return chr((ord(symbol) + ord(key) - 64) % (127 - 32) + 32)
+        if symbol.isalpha():
+            if symbol.isupper():
+                return chr((ord(symbol) + ord(key) - 65) % 26 + 65)
+            else:
+                return chr((ord(symbol) + ord(key) - 97) % 26 + 97)
+        else:
+            return symbol
 
     @staticmethod
     def decode_symbol(symbol, key):
         """Decode the symbol by the key symbol from ascii"""
-        return chr((ord(symbol) - ord(key)) % (127 - 32) + 32)
+        if symbol.isalpha():
+            if symbol.isupper():
+                return chr((ord(symbol) - ord(key) - 65) % 26 + 65)
+            else:
+                return chr((ord(symbol) - ord(key) - 97) % 26 + 97)
+        else:
+            return symbol
 
     @staticmethod
     def encode_word_caesar(word, key):
@@ -59,8 +72,19 @@ class Encryptor(object):
         code = ""
         it = 0
         for symbol in word:
-            it = it + 1 if it < len(key) - 1 else 0
             code += Encryptor.encode_symbol(symbol, key[it])
+            it = (it + 1) % len(key)
+        return code
+
+    @staticmethod
+    def encode_word_vernam(word, key):
+        """Encode the word by the key word"""
+        code = ""
+        for i, j in zip(word, key):
+            if i.isalpha() and j.isalpha():
+                code += chr(ord(i) ^ ord(j))
+            else:
+                code += i
         return code
 
     @staticmethod
@@ -77,6 +101,17 @@ class Encryptor(object):
         code = ""
         it = 0
         for symbol in word:
-            it = it + 1 if it < len(key) - 1 else 0
             code += Encryptor.decode_symbol(symbol, key[it])
+            it = (it + 1) % len(key)
+        return code
+
+    @staticmethod
+    def decode_word_vernam(word, key):
+        """Decode the word by the key word"""
+        code = ""
+        for i, j in zip(word, key):
+            if i.isalpha() and j.isalpha():
+                code += chr(ord(i) ^ ord(j))
+            else:
+                code += i
         return code
