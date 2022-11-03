@@ -1,4 +1,4 @@
-# python_review1
+# Scrambler project
 
 Project "Scrambler" made by Polev Alexey, group 126
 
